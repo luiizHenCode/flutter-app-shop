@@ -8,25 +8,29 @@ import 'package:shop/models/order.dart';
 import 'package:shop/utils/base_url.dart';
 
 class OrdersList with ChangeNotifier {
+  final String _token;
+
   final String _baseUrl = '${BaseUrl.server}/orders';
 
-  final List<Order> _items = [];
+  List<Order> _items;
+
+  OrdersList(this._token, this._items);
 
   List<Order> get items => [..._items];
 
   int get itemsCount => _items.length;
 
   Future<void> loadOrders() async {
-    _items.clear();
+    final List<Order> items = [];
 
-    final response = await http.get(Uri.parse('$_baseUrl.json'));
+    final response = await http.get(Uri.parse('$_baseUrl.json?auth=$_token'));
 
     if (response.body == 'null') return;
 
     Map<String, dynamic> data = jsonDecode(response.body);
 
     data.forEach((orderId, order) {
-      _items.add(
+      items.add(
         Order(
           id: orderId,
           total: order['total'],
@@ -45,6 +49,8 @@ class OrdersList with ChangeNotifier {
       );
     });
 
+    _items = items.reversed.toList();
+
     notifyListeners();
   }
 
@@ -52,7 +58,7 @@ class OrdersList with ChangeNotifier {
     final date = DateTime.now();
 
     await http.post(
-      Uri.parse('$_baseUrl.json'),
+      Uri.parse('$_baseUrl.json?auth=$_token'),
       body: jsonEncode({
         'total': cart.totalAmount,
         'date': date.toIso8601String(),
@@ -68,18 +74,6 @@ class OrdersList with ChangeNotifier {
             .toList(),
       }),
     );
-
-    // final orderId = jsonDecode(response.body)['name'];
-
-    // _items.insert(
-    //   0,
-    //   Order(
-    //     id: orderId,
-    //     total: cart.totalAmount,
-    //     date: date,
-    //     products: cart.items.values.toList(),
-    //   ),
-    // );
 
     notifyListeners();
   }

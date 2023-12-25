@@ -15,10 +15,22 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ProductsList()),
-        ChangeNotifierProvider(create: (_) => Cart()),
-        ChangeNotifierProvider(create: (_) => OrdersList()),
         ChangeNotifierProvider(create: (_) => Auth()),
+        ChangeNotifierProxyProvider<Auth, ProductsList>(
+          create: (_) => ProductsList('', []),
+          update: (ctx, auth, previousProducts) => ProductsList(
+            auth.token ?? '',
+            previousProducts?.items ?? [],
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, OrdersList>(
+          create: (_) => OrdersList('', []),
+          update: (ctx, auth, previousOrders) => OrdersList(
+            auth.token ?? '',
+            previousOrders?.items ?? [],
+          ),
+        ),
+        ChangeNotifierProvider(create: (_) => Cart()),
       ],
       child: const MyApp(),
     ),
