@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop/exceptions/auth_exeception.dart';
+import 'package:shop/utils/secrets.dart';
 
 class Auth with ChangeNotifier {
   String? _token;
@@ -34,7 +35,7 @@ class Auth with ChangeNotifier {
     required String urlSegment,
   }) async {
     final url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyBATnnInsZYmP3PA3lKsulioTpFwX3NYXI";
+        "https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=${Secrets.apiToken}";
 
     final response = await http.post(
       Uri.parse(url),
