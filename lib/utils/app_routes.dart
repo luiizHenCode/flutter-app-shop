@@ -1,5 +1,5 @@
 class AppRoutes {
-  static String home = '/';
+  static String authOrHome = '/';
   static String productDetail = '/product-detail';
   static String cart = '/cart';
   static String products = '/products';

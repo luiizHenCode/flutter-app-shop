@@ -121,7 +121,7 @@ class CartPage extends StatelessWidget {
                       cart.clear();
 
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                        AppRoutes.home,
+                        AppRoutes.authOrHome,
                         (route) => false,
                         arguments: HomeScreenArgs(
                           tabIndex: 2,

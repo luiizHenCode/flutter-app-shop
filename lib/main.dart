@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/models/auth.dart';
 import 'package:shop/models/cart.dart';
 import 'package:shop/models/orders_list.dart';
 import 'package:shop/models/products_list.dart';
+import 'package:shop/pages/auth_or_home_page.dart';
 import 'package:shop/pages/cart_page.dart';
-import 'package:shop/pages/home_page.dart';
 import 'package:shop/pages/product_detail_page.dart';
 import 'package:shop/pages/product_form_page.dart';
 import 'package:shop/pages/products_page.dart';
@@ -17,6 +18,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ProductsList()),
         ChangeNotifierProvider(create: (_) => Cart()),
         ChangeNotifierProvider(create: (_) => OrdersList()),
+        ChangeNotifierProvider(create: (_) => Auth()),
       ],
       child: const MyApp(),
     ),
@@ -50,9 +52,8 @@ class MyApp extends StatelessWidget {
               TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
             },
           )),
-      initialRoute: AppRoutes.home,
       routes: {
-        AppRoutes.home: (ctx) => const HomePage(),
+        AppRoutes.authOrHome: (ctx) => const AuthOrHomePage(),
         AppRoutes.productDetail: (ctx) => const ProductDeailPage(),
         AppRoutes.cart: (ctx) => const CartPage(),
         AppRoutes.products: (ctx) => const ProductsPage(),
