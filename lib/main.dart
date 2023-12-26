@@ -17,17 +17,19 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => Auth()),
         ChangeNotifierProxyProvider<Auth, ProductsList>(
-          create: (_) => ProductsList('', []),
+          create: (_) => ProductsList(),
           update: (ctx, auth, previousProducts) => ProductsList(
             auth.token ?? '',
+            auth.userId ?? '',
             previousProducts?.items ?? [],
           ),
         ),
         ChangeNotifierProxyProvider<Auth, OrdersList>(
-          create: (_) => OrdersList('', []),
+          create: (_) => OrdersList(),
           update: (ctx, auth, previousOrders) => OrdersList(
             auth.token ?? '',
             previousOrders?.items ?? [],
+            auth.userId ?? '',
           ),
         ),
         ChangeNotifierProvider(create: (_) => Cart()),
