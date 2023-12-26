@@ -13,14 +13,87 @@ class AuthPage extends StatefulWidget {
   State<AuthPage> createState() => _AuthPageState();
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
+  late AnimationController _animationSignInController;
+  late Animation<double> _opacitySignInAnimation;
+
+  late AnimationController _animationSignUpController;
+  late Animation<double> _opacitySignUpAnimation;
+
+  late AnimationController _animationBgController;
+  late Animation<AlignmentGeometry> _opacityBgAnimation;
+
   AuthMode _authMode = AuthMode.signIn;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationSignInController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+
+    _opacitySignInAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationSignInController,
+        curve: Curves.linear,
+      ),
+    );
+
+    _animationSignUpController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _opacitySignUpAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationSignUpController,
+        curve: Curves.linear,
+      ),
+    );
+
+    _animationBgController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _opacityBgAnimation = AlignmentTween(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationBgController,
+        curve: Curves.fastOutSlowIn,
+      ),
+    );
+
+    _animationSignInController.forward();
+
+    _opacitySignInAnimation.addListener(() {
+      setState(() {});
+    });
+  }
 
   void _switchAuthMode() {
     setState(() {
       _authMode =
           _authMode == AuthMode.signIn ? AuthMode.signUp : AuthMode.signIn;
     });
+
+    if (_authMode == AuthMode.signIn) {
+      _animationSignUpController.reverse();
+      _animationSignInController.forward();
+      _animationBgController.reverse();
+    } else {
+      _animationSignInController.reverse();
+      _animationSignUpController.forward();
+      _animationBgController.forward();
+    }
   }
 
   @override
@@ -41,9 +114,7 @@ class _AuthPageState extends State<AuthPage> {
             end: Alignment.bottomRight,
           ),
           image: DecorationImage(
-            alignment: _authMode == AuthMode.signIn
-                ? Alignment.topRight
-                : Alignment.topLeft,
+            alignment: _opacityBgAnimation.value,
             image: const AssetImage('assets/images/bg-auth-asset.jpeg'),
             fit: BoxFit.cover,
             opacity: 0.1,
@@ -80,8 +151,14 @@ class _AuthPageState extends State<AuthPage> {
                   const SizedBox(height: 36),
                   Visibility(
                     visible: _authMode == AuthMode.signIn,
-                    replacement: const SignUpForm(),
-                    child: const SignInForm(),
+                    replacement: Opacity(
+                      opacity: _opacitySignUpAnimation.value,
+                      child: const SignUpForm(),
+                    ),
+                    child: Opacity(
+                      opacity: _opacitySignInAnimation.value,
+                      child: const SignInForm(),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Center(

@@ -28,7 +28,7 @@ class ShopPage extends StatelessWidget {
         child: CircularProgressIndicator.adaptive(),
       ),
       child: RefreshIndicator.adaptive(
-        onRefresh: () => _loadProducts(context),
+        onRefresh: () async => await _loadProducts(context),
         child: ProductsGrid(
           products: loadedProducts,
         ),

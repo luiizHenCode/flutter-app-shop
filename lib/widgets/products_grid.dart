@@ -15,6 +15,7 @@ class ProductsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       clipBehavior: Clip.none,
+      physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(
         top: 8.0,
         left: 8.0,

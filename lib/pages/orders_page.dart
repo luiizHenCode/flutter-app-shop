@@ -30,6 +30,7 @@ class OrdersPage extends StatelessWidget {
                   child: Text('Nenhum pedido encontrado!'),
                 ),
                 child: ListView.separated(
+                  physics: const BouncingScrollPhysics(),
                   itemCount: orders.items.length,
                   padding: const EdgeInsets.all(8.0),
                   separatorBuilder: (context, index) =>

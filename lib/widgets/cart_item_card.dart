@@ -68,13 +68,9 @@ class _CartItemCardState extends State<CartItemCard> {
         double opacity = details.progress + 0.2;
 
         if (opacity <= 1) {
-          setState(() {
-            _opacity = opacity;
-          });
+          setState(() => _opacity = opacity);
         } else {
-          setState(() {
-            _opacity = 1;
-          });
+          setState(() => _opacity = 1);
         }
       },
       background: ClipRRect(

@@ -121,10 +121,11 @@ class Auth with ChangeNotifier {
     _email = null;
     _userId = null;
     _expiryDate = null;
-
     _clearLogoutTimer();
 
-    notifyListeners();
+    Store.remove('userData').then((value) {
+      notifyListeners();
+    });
   }
 
   void _clearLogoutTimer() {

@@ -65,7 +65,7 @@ class ProductGridCard extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      duration: const Duration(seconds: 2),
+                      duration: const Duration(seconds: 1),
                       action: SnackBarAction(
                         label: 'DESFAZER',
                         onPressed: () {
@@ -80,14 +80,24 @@ class ProductGridCard extends StatelessWidget {
           ),
         ),
         child: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              AppRoutes.productDetail,
-              arguments: product,
-            );
-          },
-          child: Image.network(product.imageUrl, fit: BoxFit.cover),
-        ),
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                AppRoutes.productDetail,
+                arguments: product,
+              );
+            },
+            child: Hero(
+              tag: product.id,
+              child: FadeInImage(
+                placeholder: const AssetImage(
+                  'assets/images/placeholder-image.webp',
+                ),
+                image: NetworkImage(product.imageUrl),
+                fit: BoxFit.cover,
+              ),
+            )
+            // child: Image.network(product.imageUrl, fit: BoxFit.cover),
+            ),
       ),
     );
   }
